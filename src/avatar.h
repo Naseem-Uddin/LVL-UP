@@ -19,6 +19,8 @@ public:
  
     // Serialization
     string serialize() const;
+
+    void progressbar();
  
     // Getters
     int getLevel() const;
