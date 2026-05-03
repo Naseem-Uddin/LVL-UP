@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <memory>
@@ -55,31 +56,3 @@ public:
         std::cout << "Reward granted for Daily Goal." << std::endl;
     }
 };
-
-int main()
-{
-    // Use a pointer to demonstrate polymorphism
-    Goal *myGoal = new DailyGoal(1, "Complete C++ conversion");
-
-    // Test the goal
-    std::cout << "Goal ID: " << myGoal->getId() << std::endl;
-    std::cout << "Goal Title: " << myGoal->getTitle() << std::endl;
-    std::cout << "Is Completed: " << (myGoal->getStatus() ? "Yes" : "No") << std::endl;
-
-    // Mark the goal as complete (Dynamic Dispatch)
-    myGoal->changeTitle("Complete C++ conversion - Updated Title");
-    std::cout << "Goal Title: " << myGoal->getTitle() << std::endl;
-
-    myGoal->markComplete();
-
-    // Check the status again
-    std::cout << "Is Completed: " << (myGoal->getStatus() ? "Yes" : "No") << std::endl;
-
-    // Get the reward
-    myGoal->getReward();
-
-    // Clean up memory
-    delete myGoal;
-
-    return 0;
-}
