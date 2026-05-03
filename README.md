@@ -1,7 +1,9 @@
-# Quest-Grill
+# LVL-UP
+
+* Ensure you are in root directory!
 
 Run the following command to generate a build for execution:
 ```
-mkdir -p build
-g++ -std=c++17 term/main.cpp src/avatar.cpp -o build/app
+g++ -std=c++17 src/main.cpp src/avatar.cpp -o build/app
+./build/app
 ```
