@@ -10,16 +10,19 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-struct LoginResult {
+struct LoginResult
+{
     bool success;
     User user;
 };
 
-bool emailExists(const string& targetEmail, const string& filename) {
+bool emailExists(const string &targetEmail, const string &filename)
+{
     ifstream file(filename);
     string line;
 
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         stringstream ss(line);
         string fName, lName, email, password;
 
@@ -28,7 +31,8 @@ bool emailExists(const string& targetEmail, const string& filename) {
         getline(ss, email, ',');
         getline(ss, password);
 
-        if (email == targetEmail) {
+        if (email == targetEmail)
+        {
             return true;
         }
     }
@@ -36,11 +40,13 @@ bool emailExists(const string& targetEmail, const string& filename) {
     return false;
 }
 
-bool validateLogin(const string& targetEmail, const string& targetPassword, const string& filename) {
+bool validateLogin(const string &targetEmail, const string &targetPassword, const string &filename)
+{
     ifstream file(filename);
     string line;
 
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         stringstream ss(line);
         string fName, lName, email, password;
 
@@ -49,12 +55,15 @@ bool validateLogin(const string& targetEmail, const string& targetPassword, cons
         getline(ss, email, ',');
         getline(ss, password);
 
-        if (email == targetEmail) {
-            if (password == targetPassword) {
+        if (email == targetEmail)
+        {
+            if (password == targetPassword)
+            {
                 return true;
-            } 
-            
-            else {
+            }
+
+            else
+            {
                 cout << "\nERROR: Incorrect password.\n";
                 return false;
             }
@@ -65,9 +74,11 @@ bool validateLogin(const string& targetEmail, const string& targetPassword, cons
     return false;
 }
 
-void saveUserData(const User& user, const string& filename) {
+void saveUserData(const User &user, const string &filename)
+{
     ofstream file(filename, ios::app);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "\nERROR: Error opening file.\n";
         return;
     }
@@ -82,62 +93,74 @@ void saveUserData(const User& user, const string& filename) {
     file.close();
 }
 
-void updateUserData(const User& user, const string& filename) {
+void updateUserData(const User &user, const string &filename)
+{
     vector<string> lines;
     ifstream file(filename);
     string line;
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         stringstream ss(line);
         string fName, lName, email, password;
         getline(ss, fName, ',');
         getline(ss, lName, ',');
         getline(ss, email, ',');
         getline(ss, password);
-        if (email == user.getEmail()) {
+        if (email == user.getEmail())
+        {
             stringstream newLine;
             newLine << user.getFName() << "," << user.getLName() << "," << user.getEmail() << "," << user.getPassword() << "," << user.getAvatar().getLevel() << "," << user.getAvatar().getXP();
             lines.push_back(newLine.str());
-        } 
-        
-        else {
+        }
+
+        else
+        {
             lines.push_back(line);
         }
     }
     file.close();
     ofstream outFile(filename);
-    for (const auto& l : lines) {
+    for (const auto &l : lines)
+    {
         outFile << l << "\n";
     }
     outFile.close();
 }
 
-void signup(const string& filename) {
-    while (true) {
+void signup(const string &filename)
+{
+    while (true)
+    {
         string fName, lName, email, password;
         cout << "\n--- SIGN UP ---\n";
         cout << "(Type 'q' at any prompt to return to Main Menu)\n";
-        
+
         cout << "First Name: ";
         getline(cin, fName);
-        if (fName == "q") return;
-        
+        if (fName == "q")
+            return;
+
         cout << "Last Name: ";
         getline(cin, lName);
-        if (lName == "q") return;
-        
+        if (lName == "q")
+            return;
+
         cout << "Email: ";
         getline(cin, email);
-        if (email == "q") return;
-        
-        if (emailExists(email, filename)) {
+        if (email == "q")
+            return;
+
+        if (emailExists(email, filename))
+        {
             cout << "\nERROR: An account with that email already exists.\n";
             continue;
         }
-        
+
         cout << "Password: ";
         getline(cin, password);
-        if (password == "q") return;
-        
+        if (password == "q")
+            return;
+
         User user(fName, lName, email, password, 1, 0);
         saveUserData(user, filename);
         cout << "\nSignup successful!\n";
@@ -145,24 +168,29 @@ void signup(const string& filename) {
     }
 }
 
-LoginResult login(const string& filename) {
-    while (true) {
+LoginResult login(const string &filename)
+{
+    while (true)
+    {
         string email, password;
         cout << "\n--- LOGIN ---\n";
         cout << "(Type 'q' at any prompt to return to Main Menu)\n";
-        
+
         cout << "Email: ";
         getline(cin, email);
-        if (email == "q") return {false, User()};
-        
+        if (email == "q")
+            return {false, User()};
+
         cout << "Password: ";
         getline(cin, password);
-        if (password == "q") return {false, User()};
-        
+        if (password == "q")
+            return {false, User()};
+
         ifstream file(filename);
         string line;
 
-        while (getline(file, line)) {
+        while (getline(file, line))
+        {
             stringstream ss(line);
             string fName, lName, e, p, lvlStr, xpStr;
             getline(ss, fName, ',');
@@ -171,17 +199,20 @@ LoginResult login(const string& filename) {
             getline(ss, p, ',');
             getline(ss, lvlStr, ',');
             getline(ss, xpStr);
-            
-            if (e == email) {
-                if (p == password) {
+
+            if (e == email)
+            {
+                if (p == password)
+                {
                     int lvl = stoi(lvlStr);
                     int xp = stoi(xpStr);
                     User user(fName, lName, e, p, lvl, xp);
 
                     return {true, user};
-                } 
-                
-                else {
+                }
+
+                else
+                {
                     cout << "\nERROR: Incorrect password.\n";
                     return {false, User()};
                 }
@@ -192,13 +223,16 @@ LoginResult login(const string& filename) {
     }
 }
 
-int main() {
+int main()
+{
     string filename = "dataFile.txt";
 
-    if (!fs::exists(filename)) {
+    if (!fs::exists(filename))
+    {
         ofstream createFile(filename);
 
-        if (!createFile.is_open()) {
+        if (!createFile.is_open())
+        {
             cerr << "\nERROR: Failed to create data file.\n";
             return 1;
         }
@@ -209,90 +243,133 @@ int main() {
     User currentUser;
     bool loggedIn = false;
 
-    while (true) {
+    while (true)
+    {
         string choice;
         cout << "\n===== MENU =====\n";
         cout << "(Type 'q' to quit)\n";
         cout << "1. Login\n";
         cout << "2. Sign Up\n\n";
         cout << "Choose option: ";
-        
-        getline(cin, choice); 
-        
-        if (choice == "1") {
+
+        getline(cin, choice);
+
+        if (choice == "1")
+        {
             LoginResult result = login(filename);
-            if (result.success) {
+            if (result.success)
+            {
                 currentUser = result.user;
                 cout << "\nLogin successful. Welcome " << currentUser.getFName() << "!\n";
-                cout << "Your Avatar - Level: " << currentUser.getAvatar().getLevel() 
+                cout << "Your Avatar - Level: " << currentUser.getAvatar().getLevel()
                      << ", XP: " << currentUser.getAvatar().getXP() << "\n";
                 loggedIn = true;
-                break; //break out of loop for the rest of the program to run after login
+                break; // break out of loop for the rest of the program to run after login
             }
         }
 
-        else if (choice == "2") {
+        else if (choice == "2")
+        {
             signup(filename);
         }
 
-        else if (choice == "q") {
+        else if (choice == "q")
+        {
             cout << "\nExiting program. Goodbye!\n";
             break;
         }
 
-        else {
+        else
+        {
             cout << "\nERROR: Invalid option. Please pick a valid option.\n";
         }
     }
 
-    if (!loggedIn) {
+    if (!loggedIn)
+    {
         return 0;
     }
 
-    //need to implement the rest of the program logic here
+    // need to implement the rest of the program logic here
     int goalId = 1;
-    while (true) {
+    while (true)
+    {
         string choice;
         cout << "\n--- USER MENU ---\n";
         cout << "(Type 'q' to quit)\n";
         cout << "1. Create Daily Goal\n";
         cout << "2. View Avatar\n";
-        cout << "3. Quit\n\n";
+        cout << "3. View My Goals\n";
+        cout << "4. Remove a Goal\n";
+        cout << "5. Mark Goal Complete\n";
+        cout << "q. Quit\n\n";
         cout << "Choose option: ";
-        
+
         getline(cin, choice);
-        
-        if (choice == "1") {
+
+        if (choice == "1")
+        {
             cout << "Goal title: ";
             string title;
             getline(cin, title);
-            Goal* g = new DailyGoal(goalId++, title);
-            cout << "Created goal: " << g->getTitle() << "\n";
-            cout << "Mark complete? (y/n): ";
-            string ans;
-            getline(cin, ans);
 
-            if (ans == "y" || ans == "Y") {
-                g->markComplete();
-                g->getReward();
-                currentUser.getAvatar().gainXP(10);
-            }
+            // 1. Create the goal
+            Goal *g = new DailyGoal(goalId++, title);
 
-            delete g;
-        } 
-        
-        else if (choice == "2") {
-            cout << "Avatar - Level: " << currentUser.getAvatar().getLevel() 
+            // 2. Add it to the user's vector!
+            currentUser.addGoal(g);
+
+            cout << "Created goal: '" << g->getTitle() << "' and added to your list!\n";
+
+            // Notice: No "delete g;" here!
+            // The User class is now responsible for deleting it in removeGoal().
+        }
+
+        else if (choice == "2")
+        {
+            cout << "Avatar - Level: " << currentUser.getAvatar().getLevel()
                  << ", XP: " << currentUser.getAvatar().getXP() << "\n";
-        } 
-        
-        else if (choice == "q") {
+        }
+        else if (choice == "3")
+        {
+            cout << "\n--- " << currentUser.getFName() << "'s Goals ---\n";
+            currentUser.displayGoals();
+        }
+        else if (choice == "4")
+        {
+            cout << "Enter Goal ID to remove: ";
+            string idStr;
+            getline(cin, idStr);
+            int id = stoi(idStr);
+            currentUser.removeGoal(id);
+        }
+        else if (choice == "5")
+        {
+            cout << "Enter Goal ID to mark complete: ";
+            string idStr;
+            getline(cin, idStr);
+            int id = stoi(idStr);
+            for (Goal *g : currentUser.getGoals())
+            {
+                if (g->getId() == id)
+                {
+                    g->markComplete();
+                    g->getReward();
+                    currentUser.getAvatar().gainXP(10);
+                    break;
+                }
+            }
+        }
+
+        else if (choice == "q")
+        {
             updateUserData(currentUser, filename);
             cout << "\nGoodbye!\n";
             break;
-        } 
-        
-        else {
+        }
+
+        else
+        {
             cout << "\nInvalid option.\n";
         }
     }
