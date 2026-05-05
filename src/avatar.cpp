@@ -57,3 +57,20 @@ void Avatar::levelUp() {
 string Avatar::serialize() const{
     return to_string(level) + "," + to_string(xp);
 }
+void Avatar::progressBar() const{
+    int total = 10;
+    int filled = (xp * total) / xpToNextLevel;
+    cout << "[";
+    
+    if (filled > total)
+        filled = total;
+    
+    for (int i = 0; i < total; i++){
+        if (i < filled)
+            cout << "●";
+        else
+            cout << "○";
+    }
+    cout << "] " << xp << "/" << xpToNextLevel << endl;
+    
+}
