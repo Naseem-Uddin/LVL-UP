@@ -329,7 +329,6 @@ int main()
         {
             cout << "Avatar - Level: " << currentUser.getAvatar().getLevel()
                  << ", XP: " << currentUser.getAvatar().getXP() << "\n";
-             currentUser.getAvatar().progressBar();
             
         }
         else if (choice == "3")
