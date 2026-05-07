@@ -45,19 +45,16 @@ public:
     }
     void removeGoal(int id)
     {
-        // 1. Find the goal
-        auto it = std::remove_if(myGoals.begin(), myGoals.end(),
-                                 [id](Goal *g)
-                                 { return g->getId() == id; });
 
-        // 2. Delete the actual memory for the goals we are removing
-        for (auto temp = it; temp != myGoals.end(); ++temp)
+        auto it = std::find_if(myGoals.begin(), myGoals.end(),
+                               [id](Goal *g)
+                               { return g->getId() == id; });
+
+        if (it != myGoals.end())
         {
-            delete *temp;
+            delete *it;
+            myGoals.erase(it);
         }
-
-        // 3. Erase the empty pointers from the vector
-        myGoals.erase(it, myGoals.end());
     }
     const std::vector<Goal *> &getGoals() const { return myGoals; }
 };

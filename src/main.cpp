@@ -300,8 +300,6 @@ int main()
         cout << "1. Create Daily Goal\n";
         cout << "2. View Avatar\n";
         cout << "3. View My Goals\n";
-        cout << "4. Remove a Goal\n";
-        cout << "5. Mark Goal Complete\n";
         cout << "q. Quit\n\n";
         cout << "Choose option: ";
 
@@ -320,24 +318,88 @@ int main()
             currentUser.addGoal(g);
 
             cout << "Created goal: '" << g->getTitle() << "' and added to your list!\n";
-
-            // Notice: No "delete g;" here!
-            // The User class is now responsible for deleting it in removeGoal().
         }
 
         else if (choice == "2")
         {
             cout << "Avatar - Level: " << currentUser.getAvatar().getLevel()
                  << ", XP: " << currentUser.getAvatar().getXP() << "\n";
-            
         }
         else if (choice == "3")
         {
             cout << "\n--- " << currentUser.getFName() << "'s Goals ---\n";
             currentUser.displayGoals();
-        }
-        else if (choice == "4")
-        {
+            cout << "\n--- Options ---\n";
+            cout << "1. Remove a Goal\n";
+            cout << "2. Mark Goal Complete\n";
+            cout << "3. Create New Goal\n";
+            cout << "q. Back to User Menu\n";
+            cout << "Choose option: ";
+            string subChoice;
+            getline(cin, subChoice);
+
+            if (subChoice == "1")
+            {
+                if (currentUser.getGoals().empty())
+                {
+                    cout << "No goals to remove.\n";
+                    continue; // go back to main user menu
+                }
+                cout << "Enter Goal ID to remove: ";
+                string idStr;
+                getline(cin, idStr);
+                int id = stoi(idStr);
+                currentUser.removeGoal(id);
+                cout << "Goal removed successfully.\n";
+                continue; // go back to main user menu
+            }
+            else if (subChoice == "2")
+            {
+                if (currentUser.getGoals().empty())
+                {
+                    cout << "No goals to mark complete.\n";
+                    continue; // go back to main user menu
+                }
+                cout << "Enter Goal ID to mark complete: ";
+                string idStr;
+                getline(cin, idStr);
+                int id = stoi(idStr);
+                for (Goal *g : currentUser.getGoals())
+                {
+                    if (g->getId() == id)
+                    {
+                        g->markComplete();
+                        g->getReward();
+                        currentUser.getAvatar().gainXP(10);
+                        cout << "Goal marked as complete. XP gained!\n";
+                        break;
+                    }
+                }
+                currentUser.removeGoal(id); // Remove the goal after marking it complete
+                continue;
+            }
+            else if (subChoice == "q")
+            {
+                continue;
+            }
+            else if (subChoice == "3")
+            {
+                cout << "Goal title: ";
+                string title;
+                getline(cin, title);
+
+                // 1. Create the goal
+                Goal *g = new DailyGoal(goalId++, title);
+
+                currentUser.addGoal(g);
+
+                cout << "Created goal: '" << g->getTitle() << "' and added to your list!\n";
+                continue;
+            }
+            else
+            {
+                cout << "Invalid option.\n";
+            }
             cout << "Enter Goal ID to remove: ";
             string idStr;
             getline(cin, idStr);
