@@ -29,6 +29,8 @@ public:
     // Abstract methods (Pure Virtual Functions)
     virtual void markComplete() = 0;
     virtual void getReward() = 0;
+    virtual Goal *clone() const = 0;
+    void setStatus(bool completed) { isCompleted = completed; }
 
     // Getters for main
     int getId() const { return id; }
@@ -54,5 +56,11 @@ public:
     void getReward() override
     {
         std::cout << "Reward granted for Daily Goal." << std::endl;
+    }
+
+    Goal *clone() const override
+    {
+        DailyGoal *copy = new DailyGoal(*this);
+        return copy;
     }
 };
