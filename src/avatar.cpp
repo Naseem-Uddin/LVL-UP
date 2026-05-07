@@ -42,6 +42,8 @@ void Avatar::gainXP(int amount) {
  
     xp += amount;
     cout << "Gained " << amount << " XP" << endl;
+    progressBar();
+    cout << "\n";
  
     while (xp >= xpToNextLevel) {
         levelUp();
@@ -52,7 +54,10 @@ void Avatar::levelUp() {
     xp -= xpToNextLevel;         
     level+= 1;
  
-    std::cout << "LEVEL UP! You are now Level " << level << "\n";
+    cout << "LEVEL UP! You are now Level " << level << "\n";
+    progressBar();
+    cout << "\n";
+    
 }
 string Avatar::serialize() const{
     return to_string(level) + "," + to_string(xp);
