@@ -318,16 +318,12 @@ int main()
             currentUser.addGoal(g);
 
             cout << "Created goal: '" << g->getTitle() << "' and added to your list!\n";
-
-            // Notice: No "delete g;" here!
-            // The User class is now responsible for deleting it in removeGoal().
         }
 
         else if (choice == "2")
         {
             cout << "Avatar - Level: " << currentUser.getAvatar().getLevel()
                  << ", XP: " << currentUser.getAvatar().getXP() << "\n";
-            
         }
         else if (choice == "3")
         {
@@ -380,11 +376,11 @@ int main()
                     }
                 }
                 currentUser.removeGoal(id); // Remove the goal after marking it complete
-                continue;                   // go back to main user menu
+                continue;
             }
             else if (subChoice == "q")
             {
-                continue; // go back to main user menu
+                continue;
             }
             else if (subChoice == "3")
             {
@@ -395,11 +391,10 @@ int main()
                 // 1. Create the goal
                 Goal *g = new DailyGoal(goalId++, title);
 
-                // 2. Add it to the user's vector!
                 currentUser.addGoal(g);
 
                 cout << "Created goal: '" << g->getTitle() << "' and added to your list!\n";
-                continue; // go back to main user menu
+                continue;
             }
             else
             {
